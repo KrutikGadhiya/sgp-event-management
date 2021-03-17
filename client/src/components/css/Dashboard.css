@@ -1,0 +1,38 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+#card {
+    margin: 0.5%;
+    padding: 2%;
+    text-align: left;
+    position: relative;
+    width: 100%;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 2px solid rgba(43, 86, 202, 0.125);
+    border-radius: 0.25rem;
+    box-shadow: #495057;
+  }
+.chart1 {
+  text-align: center;
+}
+.chart1 {
+  float: left;
+  width: 100%;
+}
+@media screen and (max-width: 600px) {
+    .barchart,
+    .chart1 {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+@media (max-width: 1200px){
+    .mainContainer{
+        flex-direction: column;
+        width: 100%;
+    }
+}
