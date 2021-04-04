@@ -1,5 +1,21 @@
 module.exports = ({ eventId, eventName, evntType, propDate, propDateTo, durEvnt, evntLevel, orgInst, deptName, inputList}) => {
     const today = new Date();
+    var cordinatorFields = ``
+    for (let i = 0; i < inputList.length; i++) {
+       //console.log(cordinatorFields);
+       cordinatorFields += `<tr class="item">
+                              <td>Coordinator Name:</td>
+                              <td>${inputList[i].cordName}</td>
+                           </tr>
+                           <tr class="item">
+                              <td>Coordinator Email:</td>
+                              <td>${inputList[i].cordEmail}</td>
+                           </tr>
+                           <tr class="item">
+                              <td>Coordinator Contact Number:</td>
+                              <td>${inputList[i].cordNumber}</td>
+                           </tr>`
+    }
 return `
 <!doctype html>
 <html>
@@ -86,7 +102,7 @@ return `
                <td colspan="2">
                   <table>
                      <tr>
-                        <td class="title"><img  src="https://i2.wp.com/cleverlogos.co/wp-content/uploads/2018/05/reciepthound_1.jpg?fit=800%2C600&ssl=1"
+                        <td class="title"><img  src="https://yt3.ggpht.com/a/AATXAJybtd3y_fW-_MgaRsbLpldlKK-02_AMYxU6ZEgKnQ=s900-c-k-c0xffffffff-no-rj-mo"
                            style="width:100%; max-width:156px;"></td>
                         <td>
                            Datum: ${`${today.getDate()}. ${today.getMonth() + 1}. ${today.getFullYear()}.`}
@@ -115,45 +131,56 @@ return `
             </tr>
             <tr class="item">
                <td>Event ID:</td>
-               <td>${eventId}$</td>
+               <td>${eventId}</td>
             </tr>
             <tr class="item">
               <td>Event Name:</td>
-              <td>${eventName}$</td>
+              <td>${eventName}</td>
             </tr>
             <tr class="item">
               <td>Event Type:</td>
-              <td>${evntType}$</td>
+              <td>${evntType}</td>
             </tr>
             <tr class="item">
               <td>Proposed Date From:</td>
-              <td>${propDate}$</td>
+              <td>${propDate}</td>
             </tr>
             <tr class="item">
               <td>Proposed Date To:</td>
-              <td>${propDateTo}$</td>
+              <td>${propDateTo}</td>
             </tr>
             <tr class="item">
               <td>Event Duration:</td>
-              <td>${durEvnt}$</td>
+              <td>${durEvnt}</td>
             </tr>
             <tr class="item">
               <td>Event Level:</td>
-              <td>${evntLevel}$</td>
+              <td>${evntLevel}</td>
             </tr>
             <tr class="item">
               <td>Organizing Institute:</td>
-              <td>${orgInst}$</td>
+              <td>${orgInst}</td>
             </tr>
             <tr class="item">
               <td>Department Name:</td>
-              <td>${deptName}$</td>
+              <td>${deptName}</td>
             </tr>
             <tr class="heading">
               <td>Coordinator Details:</td>
               <td></td>
             </tr>
-            <tr class="item">
+            ${cordinatorFields}
+         </table>
+         <br />
+         <h1 class="justify-center"></h1>
+      </div>
+   </body>
+</html>
+
+    `;
+};
+
+{/* <tr class="item">
               <td>Coordinator Name:</td>
               <td>${inputList[0].cordName}$</td>
             </tr>
@@ -164,13 +191,4 @@ return `
             <tr class="item">
               <td>Coordinator Contact Number:</td>
               <td>${inputList[0].cordNumber}$</td>
-            </tr>
-         </table>
-         <br />
-         <h1 class="justify-center"></h1>
-      </div>
-   </body>
-</html>
-
-    `;
-};
+            </tr> */}
