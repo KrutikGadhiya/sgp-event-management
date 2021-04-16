@@ -1,15 +1,17 @@
 import './css/CreateEvent.css';
 import { useState } from 'react'
+import { useHistory } from "react-router-dom";
 import CordinatorFields from './CordinatorFields';
 import SpeakerFields from './SpeakerFields';
 import axios from 'axios'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 //import { Link } from 'react-router-dom';
 
-function onSuccessSubmit(){
-    window.confirm( " Success! " );
-}
+toast.configure()
 
 function EditEvent(){
+    const history = useHistory()
     const [eventId, setevntId] = useState('');
     const [eventName, setevntName] = useState('');
     const [evntType, setevntType] = useState('');
@@ -20,9 +22,11 @@ function EditEvent(){
     const [orgInst, setorgInst] = useState('');
     const [deptName, setdeptName] = useState('');
     const [inputList, setInputList] = useState([{ cordName: "", cordEmail: "", cordNumber: "" }]);
+    const [cordList, setCordList] = useState([])
 
     const [inputList1, setInputList1] = useState([{ spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
 
+    const [postEvntId, setPostEvntId] = useState('')
     const [actDate, setactDate] = useState('')
     const [actDateTo, setactDateTo] = useState('')
     const [evntDesc, setevntDesc] = useState('')
@@ -48,7 +52,13 @@ function EditEvent(){
 
     const getData = async () => {
         await axios.get(`/getdetails/${eventId}`)
-       .then((response) => { 
+       .then((response) => {
+           if(response.data.error){
+               toast.error(response.data.error, {
+                   autoClose: 5000
+               })
+               return
+           }
            console.log(response.data)
            setevntName(response.data.postDetails.eventId.eventName)
            setevntType(response.data.postDetails.eventId.evntType)
@@ -59,7 +69,9 @@ function EditEvent(){
            setorgInst(response.data.postDetails.eventId.orgInst)
            setdeptName(response.data.postDetails.eventId.deptName)
            setInputList(response.data.postDetails.eventId.inputList)
+           setCordList(response.data.postDetails.eventId.inputList)
 
+           setPostEvntId(response.data.postDetails.eventId)
            setactDate(response.data.postDetails.actDate)
            setactDateTo(response.data.postDetails.actDateTo)
            setevntDesc(response.data.postDetails.evntDesc)
@@ -82,17 +94,16 @@ function EditEvent(){
        })
     }
 
-    const handleInputChange = (e, index) => {
+    const handleInputChange2 = (e, index) => {
         const { name, value } = e.target;
-        const list = [...inputList];
+        const list = [...inputList1];
         list[index][name] = value;
-        setInputList(list);
-      };
-
+        setInputList1(list);
+    };
     const handleInputChange1 = (e, index) => {
         setLoading(true)
         const { name, files } = e.target;
-        const list = [...inputList];
+        const list = [...inputList1];
 
         const data = new FormData()
         data.append("file", files[0])
@@ -107,26 +118,83 @@ function EditEvent(){
             console.log(data1.url)
             setevntPic1Url(data1.url)
             list[index][name] = data1.url;
-            setInputList(list);
+            setInputList1(list);
             setLoading(false)
         })
         .catch( err => {
             console.log(err);
         })
-      };
-
+    };
     // handle click event of the Remove button
-    const handleRemoveClick = index => {
-        const list = [...inputList];
+    const handleRemoveClick1 = index => {
+        const list = [...inputList1];
         list.splice(index, 1);
-        setInputList(list);
-        };
-    
-        // handle click event of the Add button
-        const handleAddClick = () => {
-        setInputList([...inputList, { spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
-        };
+        setInputList1(list);
+    };
+    // handle click event of the Add button
+    const handleAddClick1 = () => {
+    setInputList1([...inputList1, { spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
+    };
 
+    const updateEventSubmit = () => {
+
+        if (eventName === "" || evntType === "" || propDate === "" || propDateTo === "" || durEvnt === "" || evntLevel === "" || orgInst === "" || deptName === "" || inputList === ""
+            || eventId === "" || actDate === "" || actDateTo === "" || evntDesc === "" || noOfStud === "" || evntPic1 === "" || evntPic2 === "" || evntPic3 === "" || evntPic4 === "" || evntCerti === "" || evntPstr === "" || studSheet === "" ) {
+            // fireOnFailure()
+            toast.error("Please Enter All The Fields", {
+                autoClose: 5000
+            })
+        }
+        else {
+
+            axios.post('/updateEvent', {
+                pre: {
+                    userEmail: JSON.parse(localStorage.getItem('user')).email,
+                    eventId: eventId,
+                    eventName: eventName,
+                    evntType: evntType,
+                    propDate: propDate,
+                    propDateTo: propDateTo,
+                    durEvnt: durEvnt,
+                    evntLevel: evntLevel,
+                    orgInst: orgInst,
+                    deptName: deptName,
+                    inputList: cordList
+                },
+                post: {
+                    eventId: postEvntId,
+                    actDate:actDate,
+                    actDateTo:actDateTo,
+                    inputList: inputList1,
+                    evntDesc: evntDesc,
+                    noOfStud: noOfStud,
+                    evntCerti: evntCertiUrl,
+                    evntPic1: evntPic1Url,
+                    evntPic2: evntPic2Url,
+                    evntPic3: evntPic3Url,
+                    evntPic4: evntPic4Url,
+                    evntCerti: evntCertiUrl,
+                    evntPstr: evntPstrUrl,
+                    studSheet: studSheet
+                }
+            },
+            {
+                headers:{
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                toast.success(response.data.message, {
+                    autoClose: 5000
+                })
+                //history.push('/dashboard')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+    }
 
     return(
         <div>
@@ -151,7 +219,7 @@ function EditEvent(){
         <div class="grid-container">
             <div class="col-25" id="card">
                     <div class="container">
-                        <form onSubmit={ e => e.preventDefault() }>
+                        <div>
                             <div className="eventLabel">
                                 <h3>Pre Event Information</h3>
                             </div>
@@ -275,20 +343,17 @@ function EditEvent(){
                                 {/* {inputList.map(cordFields => ( */}
                                     <CordinatorFields 
                                     input = { inputList }
-                                    ///key={cordFields.cordNumber}
-                                    //name = { cordFields.cordName }
-                                    //email = { cordFields.cordEmail }
-                                    //number = { cordFields.cordNumber }
+                                    changeCordList = { cordList => setCordList(cordList) }
                                     />
                                 {/* ))} */}
                             </div>
                         </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div className="col-25" id="card">
                     <div className="container">
-                        <form action='#'>
+                        <div>
                             <div className="eventLabel">
                                 <h3>Post Event Information</h3>
                             </div>
@@ -335,7 +400,7 @@ function EditEvent(){
                                                         name="spkName"
                                                         placeholder="Speaker Name"
                                                         value={x.spkName}
-                                                        onChange={e => handleInputChange(e, i)}
+                                                        onChange={e => handleInputChange2(e, i)}
                                                         />
                                                     </div>
                                                 </div>
@@ -350,7 +415,7 @@ function EditEvent(){
                                                         name="spkEmail"
                                                         placeholder="Speaker Email"
                                                         value={x.spkEmail}
-                                                        onChange={e => handleInputChange(e, i)}
+                                                        onChange={e => handleInputChange2(e, i)}
                                                         />
                                                     </div>
                                                 </div>
@@ -367,7 +432,7 @@ function EditEvent(){
                                                         // value={x.spkCV}
                                                         onChange={(e) => handleInputChange1(e, i)}
                                                         />
-                                                        <img style={{border: "2px solid #000"}} src={ x.spkCV } width="100px" alt="spkcv"/>
+                                                        <img style={{border: "2px solid #000"}} src={ x.spkCV } width="150px" alt="spkcv"/>
                                                     </div>
                                                 </div>
 
@@ -384,14 +449,14 @@ function EditEvent(){
                                                         // value={x.spkCV}
                                                         onChange={e => handleInputChange1(e, i)}
                                                         />
-                                                        <img style={{border: "2px solid #000"}} src={ x.spkPhoto } width="100px" alt="spkcv"/>
+                                                        <img style={{border: "2px solid #000"}} src={ x.spkPhoto } width="150px" alt="spkcv"/>
                                                     </div>
                                                 </div>
                                                 <div className="btn-box">
-                                                {inputList.length !== 1 && <button
+                                                {inputList1.length !== 1 && <button
                                                     className="rem-btn"
-                                                    onClick={() => handleRemoveClick(i)}>-</button>}
-                                                {inputList.length - 1 === i && <button className="add-btn" onClick={handleAddClick}>+</button>}
+                                                    onClick={() => handleRemoveClick1(i)}>-</button>}
+                                                {inputList1.length - 1 === i && <button className="add-btn" onClick={handleAddClick1}>+</button>}
                                                 </div>
                                             </div>
                                             );
@@ -406,7 +471,7 @@ function EditEvent(){
                                     </div>
                                     <div class="col-75">
                                         <textarea className="input" id="edesc" name="eventdesc" 
-                                        value={evntDesc} onChange = {(e) => setevntDesc(e.target.value)}
+                                        value={evntDesc} rows="10" onChange = {(e) => setevntDesc(e.target.value)}
                                         />
                                     </div>
                             </div>
@@ -427,22 +492,91 @@ function EditEvent(){
                                         <label for="ephoto">Photograph's Of Event</label>
                                     </div>
                                     <div class="col-75">
-                                        <input required className="input" type="file" id="ephoto" name="eventPhoto1" 
-                                         onChange={(e)=>setevntPic1(e.target.files)}
+                                    <input required className="input" type="file" id="ephoto" name="eventPhoto1" 
+                                         onChange={(e)=>{
+                                             setevntPic1(e.target.files)
+                                             setLoading(true)
+                                             const data = new FormData()
+                                             data.append("file", e.target.files[0])
+                                             data.append("upload_preset", "sgp-post")
+                                             data.append("cloud_name", "dkoj7svtw")
+                                             fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                 method: "post",
+                                                 body: data
+                                             })
+                                             .then( res => res.json())
+                                             .then(data1 => {
+                                                 console.log(data1.url)
+                                                 setevntPic1Url(data1.url)
+                                                 setLoading(false)
+                                             })
+                                            }
+                                        }
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntPic1Url } width="100px" alt="epic1"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntPic1Url } width="150px" alt="epic1"/>
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto2" 
-                                        onChange={(e)=>setevntPic2(e.target.files)}
+                                        onChange={(e)=>{
+                                            setevntPic2(e.target.files)
+                                            setLoading(true)
+                                            const data = new FormData()
+                                            data.append("file", e.target.files[0])
+                                            data.append("upload_preset", "sgp-post")
+                                            data.append("cloud_name", "dkoj7svtw")
+                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                method: "post",
+                                                body: data
+                                            })
+                                            .then( res => res.json())
+                                            .then(data1 => {
+                                                console.log(data1.url)
+                                                setevntPic2Url(data1.url)
+                                                setLoading(false)
+                                            })
+                                        }}
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntPic2Url } width="100px" alt="epic2"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntPic2Url } width="150px" alt="epic2"/>
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto3" 
-                                        onChange={(e)=>setevntPic3(e.target.files)}
+                                        onChange={(e)=>{
+                                            setevntPic3(e.target.files)
+                                            setLoading(true)
+                                            const data = new FormData()
+                                            data.append("file", e.target.files[0])
+                                            data.append("upload_preset", "sgp-post")
+                                            data.append("cloud_name", "dkoj7svtw")
+                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                method: "post",
+                                                body: data
+                                            })
+                                            .then( res => res.json())
+                                            .then(data1 => {
+                                                console.log(data1.url)
+                                                setevntPic3Url(data1.url)
+                                                setLoading(false)
+                                            })
+                                           }}
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntPic3Url } width="100px" alt="epic3"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntPic3Url } width="150px" alt="epic3"/>
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto4" 
-                                        onChange={(e)=>setevntPic4(e.target.files)}
+                                        onChange={(e)=>{
+                                            setevntPic4(e.target.files)
+                                            setLoading(true)
+                                            const data = new FormData()
+                                            data.append("file", e.target.files[0])
+                                            data.append("upload_preset", "sgp-post")
+                                            data.append("cloud_name", "dkoj7svtw")
+                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                method: "post",
+                                                body: data
+                                            })
+                                            .then( res => res.json())
+                                            .then(data1 => {
+                                                console.log(data1.url)
+                                                setevntPic4Url(data1.url)
+                                                setLoading(false)
+                                            })
+                                        }}
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntPic4Url } width="100px" alt="epic4"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntPic4Url } width="150px" alt="epic4"/>
                                     </div>
                             </div>
 
@@ -451,10 +585,27 @@ function EditEvent(){
                                         <label for="cert">Certificate</label>
                                     </div>
                                     <div class="col-75">
-                                        <input required className="input" type="file" id="cert" name="certificate" 
-                                        onChange={(e)=>setevntCerti(e.target.files)}
+                                    <input required className="input" type="file" id="cert" name="certificate" 
+                                        onChange={(e)=>{
+                                            setevntCerti(e.target.files)
+                                            setLoading(true)
+                                            const data = new FormData()
+                                            data.append("file", e.target.files[0])
+                                            data.append("upload_preset", "sgp-post")
+                                            data.append("cloud_name", "dkoj7svtw")
+                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                method: "post",
+                                                body: data
+                                            })
+                                            .then( res => res.json())
+                                            .then(data1 => {
+                                                console.log(data1.url)
+                                                setevntCertiUrl(data1.url)
+                                                setLoading(false)
+                                            })
+                                        }}
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntCertiUrl } width="100px" alt="ecerti"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntCertiUrl } width="150px" alt="ecerti"/>
                                     </div>
                             </div>
                             <div class="row">
@@ -462,10 +613,27 @@ function EditEvent(){
                                         <label for="poster">Event Poster</label>
                                     </div>
                                     <div class="col-75">
-                                        <input required className="input" type="file" id="poster" name="poster" 
-                                        onChange={(e)=>setevntPstr(e.target.files)}
+                                    <input required className="input" type="file" id="poster" name="poster" 
+                                        onChange={(e)=>{
+                                            setLoading(true)
+                                            setevntPstr(e.target.files)
+                                            const data = new FormData()
+                                            data.append("file", e.target.files[0])
+                                            data.append("upload_preset", "sgp-post")
+                                            data.append("cloud_name", "dkoj7svtw")
+                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                method: "post",
+                                                body: data
+                                            })
+                                            .then( res => res.json())
+                                            .then(data1 => {
+                                                console.log(data1.url)
+                                                setevntPstrUrl(data1.url)
+                                                setLoading(false)
+                                            })
+                                           }}
                                         />
-                                        <img style={{border: "2px solid #000"}} src={ evntPstrUrl } width="100px" alt="epstr"/>
+                                        <img style={{border: "2px solid #000"}} src={ evntPstrUrl } width="150px" alt="epstr"/>
                                     </div>
                             </div>
                             <div class="row">
@@ -480,14 +648,14 @@ function EditEvent(){
                             </div>
 
 
-                        </form>
+                        </div>
                     </div>
             </div>
         </div>
             <div>
                 <div className="sub-btn">
                     <div class="row">
-                        <input className="submit" onClick = { onSuccessSubmit } type="submit" value="Submit" />
+                        <input className="submit" onClick = { updateEventSubmit } type="submit" value="Submit" />
                     </div>
                 </div>
             </div>

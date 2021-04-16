@@ -62,14 +62,17 @@ router.get('/getdetails/:id', async (req, res) => {
             })
             .catch( err => {
                 console.log(err);
+                res.json({error: "Something Went Wrong!!"})
             })
         })
         .catch( err => {
             console.log(err)
+            res.json({error: "Make Sure The Post Event Is Added"})
         })
     })
     .catch((err) => {
         console.log(err)
+        res.json({error: "Something Went Wrong!! Make Sure The Event ID is correct"})
     })
 })
 

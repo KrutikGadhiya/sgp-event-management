@@ -287,7 +287,7 @@ function PostEvent(){
 
                             <div class="row">
                                     <div class="col-25">
-                                        <label for="ephoto"><b>Photograph's Of Even</b>t<br/>(upload 4 photographs)<br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
+                                        <label for="ephoto"><b>Photograph's Of Event</b>t<br/>(upload 4 photographs)<br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
                                     </div>
                                     <div class="col-75">
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto1" 

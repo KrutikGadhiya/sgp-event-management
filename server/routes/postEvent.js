@@ -49,19 +49,19 @@ router.post('/postEvent', requireLogin, (req, res) => {
 
 })
     
-router.get('/getdetails/:id', async (req, res) => {
-    //console.log(req.params)
-    const id = req.params.id
-    //console.log(id)
-    // preEvent.findOne({ eventId: req.body.eventId })
-    preEvent.findOne({ eventId: id })
-    .then((data) => {
-        console.log(data);
-        res.send(data)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-})
+// router.get('/getdetails/:id', async (req, res) => {
+//     //console.log(req.params)
+//     const id = req.params.id
+//     //console.log(id)
+//     // preEvent.findOne({ eventId: req.body.eventId })
+//     preEvent.findOne({ eventId: id })
+//     .then((data) => {
+//         console.log(data);
+//         res.send(data)
+//     })
+//     .catch((err) => {
+//         console.log(err)
+//     })
+// })
 
 module.exports = router

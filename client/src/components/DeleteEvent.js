@@ -1,9 +1,9 @@
 import './css/CreateEvent.css';
 import { useState } from 'react'
 import CordinatorFields from './CordinatorFields';
-import SpeakerFields from './SpeakerFields';
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css'
 //import { Link } from 'react-router-dom';
 
@@ -43,15 +43,21 @@ function DeleteEvent(){
     const [loading, setLoading] = useState(false)
     const [haveLst, setHaveLst] = useState(false)
 
-    const [uId, setUId] = useState('')
-    const [preId, setPreId] = useState('')
-    const [postId, setPostId] = useState('')
+    const [uId, setUId] = useState("")
+    const [preId, setPreId] = useState("")
+    const [postId, setPostId] = useState("")
 
 
 
     const getData = async () => {
         await axios.get(`/getdetails/${eventId}`)
-       .then((response) => { 
+       .then((response) => {
+            if(response.data.error){
+                toast.error(response.data.error, {
+                    autoClose: 5000
+                })
+                return
+            }
            console.log(response.data)
            setevntName(response.data.postDetails.eventId.eventName)
            setevntType(response.data.postDetails.eventId.evntType)
@@ -90,26 +96,45 @@ function DeleteEvent(){
     }
 
     const deleteEvent = () => {
-        // axios.post(`/deleteEvent/${uId, preId, postId}`, {},
-        axios.post("/deleteEvent", { uId, preId, postId },
-        {
-            // params: { uId, preId, postId },
-            headers:{
-                Authorization: `Bearer ${localStorage.getItem('jwt')}`
-            }   
-        })
-        .then((response) => {
-            console.log(response)
-            toast.success(response.data.message, {
-                autoClose: 5000
-            })
-        })
-        .catch( err => {
-            console.log(err);
-            toast.error(err, {
-                autoClose: 5000
-            })
-        })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You Are About To Delete The Event!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'red',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Delete!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post("/deleteEvent", { uId, preId, postId },
+                {
+                    // params: { uId, preId, postId },
+                    headers:{
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                    }   
+                })
+                .then((response) => {
+                    console.log(response)
+                    toast.success(response.data.message, {
+                        autoClose: 5000
+                    })
+                })
+                .catch( err => {
+                    console.log(err);
+                    toast.error(err, {
+                        autoClose: 5000
+                    })
+                })
+            }
+            else {
+                Swal.fire(
+                {
+                    title: 'Delete Event Was Cancelled',
+                    icon: 'info',
+                }
+                )
+            }
+          })
     }
 
     const handleInputChange = (e, index) => {
@@ -417,12 +442,12 @@ function DeleteEvent(){
                                                         <img style={{border: "2px solid #000"}} src={ x.spkPhoto } width="100px" alt="spkcv"/>
                                                     </div>
                                                 </div>
-                                                <div className="btn-box">
-                                                {inputList.length !== 1 && <button
-                                                    className="rem-btn"
-                                                    onClick={() => handleRemoveClick(i)}>-</button>}
-                                                {inputList.length - 1 === i && <button className="add-btn" onClick={handleAddClick}>+</button>}
-                                                </div>
+                                                {/* <div className="btn-box">
+                                                    {inputList.length !== 1 && <button
+                                                        className="rem-btn"
+                                                        onClick={() => handleRemoveClick(i)}>-</button>}
+                                                    {inputList.length - 1 === i && <button className="add-btn" onClick={handleAddClick}>+</button>}
+                                                </div> */}
                                             </div>
                                             );
                                         })}
@@ -517,7 +542,7 @@ function DeleteEvent(){
             <div>
                 <div className="sub-btn">
                     <div class="row">
-                        <input className="submit" onClick = { deleteEvent } type="submit" value="Submit" />
+                        <input style={{backgroundColor: "red"}} className="submit" onClick = { deleteEvent } type="submit" value="Submit" />
                     </div>
                 </div>
             </div>

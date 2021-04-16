@@ -19,6 +19,55 @@ let obj = {
     email: 'UserName@mail.com'
 };
 
+const validateEmail = (em) => {
+    const x = document.getElementById('e-mail')
+    if(em === ''){
+        x.className = "sinput inValidEmail"
+    }
+    else if(!emailRegex.test(em)){
+        x.className = "sinput inValidEmail"
+    }
+    else{
+        x.className = "sinput validEmail"
+    }
+}
+const validateName = (em) => {
+    const x = document.getElementById('name')
+    if(em === ''){
+        x.className = "sinput inValidEmail"
+    }
+    else if(!nameRegex.test(em)){
+        x.className = "sinput inValidEmail"
+    }
+    else{
+        x.className = "sinput validEmail"
+    }
+}
+const validatePass = (em) => {
+    const x = document.getElementById('pass')
+    if(em === ''){
+        x.className = "sinput inValidEmail"
+    }
+    else if(!passRegex.test(em)){
+        x.className = "sinput inValidEmail"
+    }
+    else{
+        x.className = "sinput validEmail"
+    }
+}
+const validatePass1 = (em) => {
+    const x = document.getElementById('pass1')
+    if(em === ''){
+        x.className = "sinput inValidEmail"
+    }
+    else if(!passRegex.test(em)){
+        x.className = "sinput inValidEmail"
+    }
+    else{
+        x.className = "sinput validEmail"
+    }
+}
+
 function SignUp(props){
     const history = useHistory()
 
@@ -184,27 +233,27 @@ function SignUp(props){
 
                 <div id="inputContainer">
                     <div>
-                        <input className="sinput" type="text" name="name" placeholder="Enter Your Name" 
+                        <input id="name" className="sinput" type="text" name="name" placeholder="Enter Your Name" 
                         value={fullName}
-                        onChange = { e => setFullName(e.target.value)}
+                        onChange = { e => { setFullName(e.target.value); validateName(e.target.value) }}
                         />
                     </div>
                     <div>
-                        <input className="sinput" type="email" name="email" placeholder="Email" 
+                        <input id="e-mail" className="sinput" type="email" name="email" placeholder="Email" 
                         value={email1}
-                        onChange = { e => setEmail1(e.target.value)}
+                        onChange={ e => {setEmail1(e.target.value); validateEmail(e.target.value)}}
                         />
                     </div>
                     <div>
-                        <input className="sinput" type="password" name="password" placeholder="Password" 
+                        <input id="pass" className="sinput" type="password" name="password" placeholder="Password" 
                         value={pass}
-                        onChange = { e => setPass(e.target.value)}
+                        onChange = { e => { setPass(e.target.value); validatePass(e.target.value)}}
                         />
                     </div>
                     <div>
-                        <input className="sinput" type="password" name="password" placeholder="Confirm Password" 
+                        <input id="pass1" className="sinput" type="password" name="password" placeholder="Confirm Password" 
                         value={secPass}
-                        onChange = { e => setSecPass(e.target.value)}
+                        onChange = { e => { setSecPass(e.target.value); validatePass1(e.target.value)}}
                         />
                     </div>
                     <div>

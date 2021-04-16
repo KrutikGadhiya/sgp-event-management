@@ -22,6 +22,7 @@ function CordinatorFields(props) {
     const list = [...inputList];
     list[index][name] = value;
     setInputList(list);
+    props.changeCordList(list)
   };
 
   // handle click event of the Remove button
@@ -29,11 +30,13 @@ function CordinatorFields(props) {
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
+    props.changeCordList(list)
   };
 
   // handle click event of the Add button
   const handleAddClick = () => {
     setInputList([...inputList, { cordName: "", cordEmail: "", cordNumber: "" }]);
+    props.changeCordList([...inputList, { cordName: "", cordEmail: "", cordNumber: "" }]);
   };
 
   return (

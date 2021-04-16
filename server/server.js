@@ -25,6 +25,7 @@ app.use(require('./routes/auth'))
 app.use(require("./routes/preEvent"))
 app.use(require("./routes/postEvent"))
 app.use(require("./routes/updateDelete"))
+app.use(require("./routes/chartDetails"))
 
 
 app.get('/myEvents', requireLogin, (req, res) => {

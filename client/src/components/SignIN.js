@@ -22,13 +22,25 @@ let obj = {
 const validateEmail = (em) => {
     const x = document.getElementById('e-mail')
     if(em === ''){
-        x.className += " inValidEmail"
+        x.className = "sinput inValidEmail"
     }
     else if(!emailRegex.test(em)){
-        x.className += " inValidEmail"
+        x.className = "sinput inValidEmail"
     }
     else{
-        x.className += " validEmail"
+        x.className = "sinput validEmail"
+    }
+}
+const validatePass = (em) => {
+    const x = document.getElementById('pass')
+    if(em === ''){
+        x.className = "sinput inValidEmail"
+    }
+    else if(!passRegex.test(em)){
+        x.className = "sinput inValidEmail"
+    }
+    else{
+        x.className = "sinput validEmail"
     }
 }
 
@@ -193,13 +205,13 @@ function SignIN(props){
                         <div>
                             <input id='e-mail' className="sinput" type="email" name="email" placeholder="Email" 
                             value={ email1 }
-                            onChange={ e => {setEmail1(e.target.value); validateEmail(e.target.value)}}
+                            onChange={ e => { setEmail1(e.target.value); validateEmail(e.target.value)} }
                             />
                         </div>
                         <div>
-                            <input className="sinput" type="password" name="password" placeholder="Password" 
+                            <input id="pass" className="sinput" type="password" name="password" placeholder="Password" 
                             value={ pass }
-                            onChange={ e => setPass(e.target.value)}
+                            onChange={ e => { setPass(e.target.value); validatePass(e.target.value)} }
                             />
                         </div>
                         <div>

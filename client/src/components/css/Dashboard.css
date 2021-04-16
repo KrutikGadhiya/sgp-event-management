@@ -6,6 +6,7 @@
 .card {
     margin: 0.5%;
     padding: 2%;
+    padding-bottom: 5%;
     text-align: left;
     position: relative;
     width: 100%;
@@ -21,11 +22,12 @@
 }
 .chart1 {
   text-align: center;
+  height: 500px;
 }
-.chart1 {
+/* .chart1 {
   float: left;
   width: 100%;
-}
+} */
 
 .allEventTable {
   border-collapse: collapse;
@@ -44,6 +46,8 @@
     .chart1 {
       width: 100%;
       margin-top: 0;
+      padding: 2%;
+      padding-bottom: 4%;
     }
   }
 @media (max-width: 1200px){

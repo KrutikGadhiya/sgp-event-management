@@ -44,9 +44,26 @@ const PrePdf = (props) => {
       })
    }
 
+   function exportHTML(){
+      var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+           "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+           "xmlns='http://www.w3.org/TR/REC-html40'>"+
+           "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+      var footer = "</body></html>";
+      var sourceHTML = header+document.getElementById("doc").innerHTML+footer;
+      
+      var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+      var fileDownload = document.createElement("a");
+      document.body.appendChild(fileDownload);
+      fileDownload.href = source;
+      fileDownload.download = 'document.doc';
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
+   }
+
     return(
        <>
-        <div class="invoice-box" ref={ref}>
+        <div id="doc" class="invoice-box" ref={ref}>
             <table cellPadding="0" cellSpacing="0">
                <tr class="top">
                   <td colspan="2">
@@ -120,47 +137,6 @@ const PrePdf = (props) => {
                <td></td>
                </tr>
 
-{/* {inputList.map((x, i) => {
-   return (
-      <div className="box">
-            <input
-               required
-               className="input"
-               type="text"
-               name="cordName"
-               placeholder="Cordinator Name"
-               value={x.cordName}
-               onChange={e => handleInputChange(e, i)}
-            />
-            <input
-               required
-               type="email"
-               className="input"
-               name="cordEmail"
-               placeholder="Cordinator Email"
-               value={x.cordEmail}
-               onChange={e => handleInputChange(e, i)}
-            />
-            <input
-               required
-               type="number"
-               className="input"
-               name="cordNumber"
-               placeholder="Contact Number"
-               value={x.cordNumber}
-               onChange={e => handleInputChange(e, i)}
-            />
-            <div className="btn-box">
-               {inputList.length !== 1 && <button
-                  id='removefield'
-                  className="rem-btn"
-                  onClick={(e) => { handleRemoveClick(i); e.preventDefault() }}>-</button>}
-               {inputList.length - 1 === i && <button id='addfield' className="add-btn" onClick={handleAddClick}>+</button>}
-            </div>
-      </div>
-   );
-})} */}
-
                {
                   props.inputList.map((x, i) => {
                      return (
@@ -194,7 +170,9 @@ const PrePdf = (props) => {
       <div style={{textAlign: 'center', padding: '2% 0'}}>
          <button className='submit' onClick={() => { props.changeState(false)}}>GO Back</button>
          <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>
-         <button className="submit" onClick = { createAndDownloasPdf } >Create HTML PDF</button>
+         <button className="submit" onClick = { createAndDownloasPdf } >Download PDF</button>
+         <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>
+         <button className="submit" onClick = { exportHTML } >Download Word</button>
       </div>
       </>
     )

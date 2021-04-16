@@ -257,6 +257,8 @@ function CreateEvent(props) {
                                             <option value="Technical">Technical</option>
                                             <option value="Nontechnical">Non-Technical</option>
                                             <option value="Cultural">Cultural</option>
+                                            <option value="FTP">FTP</option>
+                                            <option value="HTTP">HTTP</option>
                                         </select>
                                     </div>
                                 </div>
