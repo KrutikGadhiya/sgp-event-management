@@ -1,6 +1,19 @@
-import { Bar, Line, Pie, Polar, Radar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
-const BarChart = () => {
+let yearList = [2016, 2017, 2018, 2019, 2020, 2021]
+
+const years = (from, to) => {
+    yearList = []
+    for(let i = from; i <= to; i++){
+        yearList.push(i)
+    }
+}
+
+const BarChart = (props) => {
+    const { from, to } = props
+    // console.log(from.slice(0, 4), to.slice(0, 4))
+    years(parseInt(from.slice(0, 4)), parseInt(to.slice(0, 4)))
+    console.log(yearList)
     return (
         <div>
             <Bar 

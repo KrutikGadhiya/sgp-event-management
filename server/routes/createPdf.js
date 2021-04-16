@@ -7,7 +7,7 @@ const dir = __dirname;
 const dir2 = dir.replace("\\" + "routes" , '')
 
 router.post('/create-pdf', (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     pdf.create(pdfTemplate(req.body), {}).toFile('./result.pdf', (err) => {
         console.log('creating PDF')
         if(err){

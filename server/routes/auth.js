@@ -10,13 +10,8 @@ const requireLogin = require('../middleware/requireLogin')
 const JWT_SECRET = 'ahwifbdoajxcvbneiajvcebp'
 
 
-router.get('/protected',requireLogin ,(req, res) => {
-    res.send('Hello User')
-})
-
-
 router.post('/saveUser', (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const { name, email, password } = req.body
     if(!email || !password || !name){
         return res.status(422).json({error: "please add all the fields!"})
@@ -51,6 +46,7 @@ router.post('/saveUser', (req, res) => {
 })
 
 router.post('/userSignin', (req, res) => {
+
     const { email, password } = req.body
     if(!email || !password){
         return res.status(422).json({error: "please add email or Password!"})
@@ -66,7 +62,8 @@ router.post('/userSignin', (req, res) => {
                 // res.json({message: "Successfully Signed IN"})
 
                 const token = jwt.sign({ id: savedUser._id}, JWT_SECRET)
-                res.json({token: token})
+                const { _id, userName, email } = savedUser
+                res.json({token: token, user: { _id, userName, email }, success: true})
             }
             else{
                 return res.status(422).json({error: "Invalid email or Password!"})

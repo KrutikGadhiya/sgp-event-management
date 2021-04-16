@@ -1,11 +1,8 @@
-import Navbar from './Navbar';
-import { useState } from 'react';
-//import CreateEvent from './CreateEvent';
+import Navbar from './Navbar'
 
 function HomePage(props){
     return(
         <div>
-            {/* { console.log("in Home", props.name, props.usname )} */}
             <Navbar name = { props.name } usname = {props.usname} />
         </div>
     );

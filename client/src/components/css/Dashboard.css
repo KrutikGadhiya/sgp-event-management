@@ -3,7 +3,7 @@
   flex-direction: row;
   width: 100%;
 }
-#card {
+.card {
     margin: 0.5%;
     padding: 2%;
     text-align: left;
@@ -16,6 +16,9 @@
     border-radius: 0.25rem;
     box-shadow: #495057;
   }
+.tableDiv{
+  overflow-x: auto;
+}
 .chart1 {
   text-align: center;
 }
@@ -23,6 +26,19 @@
   float: left;
   width: 100%;
 }
+
+.allEventTable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 2px solid #ddd;
+}
+.allEventTable th, td {
+  text-align: left;
+  padding: 16px;
+}
+.allEventTable tr:nth-child(even){background-color: #f2f2f2}
+
 @media screen and (max-width: 600px) {
     .barchart,
     .chart1 {

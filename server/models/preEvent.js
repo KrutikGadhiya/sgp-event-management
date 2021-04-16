@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Schema.Types
 
 const PreEventSchema = mongoose.Schema({
     userEmail: {
@@ -37,6 +38,10 @@ const PreEventSchema = mongoose.Schema({
             cordEmail: String,
             cordNumber: String
         }]
+    },
+    createdBy:{
+        type: ObjectId,
+        ref: "User"
     }
 })
 

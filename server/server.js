@@ -4,7 +4,9 @@ const pdf = require('html-pdf');
 const cors = require('cors');
 const dbfile = require('./conn');
 const preEvent = require('./models/preEvent')
+const postEvent = require('./models/postEvent')
 const User = require('./models/user')
+const requireLogin = require('./middleware/requireLogin')
 
 const pdfTemplate = require('./documents');
 const { json } = require('body-parser');
@@ -20,10 +22,26 @@ app.use(bodyParser.json());
 app.use(require('./routes/createPdf'))
 app.use(require('./routes/getCount'))
 app.use(require('./routes/auth'))
+app.use(require("./routes/preEvent"))
+app.use(require("./routes/postEvent"))
+app.use(require("./routes/updateDelete"))
 
 
-app.get('/allEvents', (req, res) => {
+app.get('/myEvents', requireLogin, (req, res) => {
+    //console.log(req.user);
+    preEvent.find({createdBy: req.user._id})
+    .populate("createdBy", "_id userName email")
+    .then( mypost => {
+        res.json({evnts: mypost})
+    })
+    .catch( err => {
+        console.log(err)
+    })
+})
+
+app.get('/allEvents', requireLogin, (req, res) => {
     preEvent.find()
+    .populate("createdBy", "_id userName email")
     .then( evnts => {
         res.json({evnts})
     })
@@ -32,36 +50,37 @@ app.get('/allEvents', (req, res) => {
     })
 })
 
-app.post('/postFrom', (req, res) => {
-    const data = req.body
-    console.log(data.inputList[0].spkCV[0]);
-})
-
-app.post('/preevent', (req, res) => {
-    console.log('details received')
-    //console.log(req.body)
-     preEvent.create(req.body)
-     .then((response) => {
-         console.log("ENTRY MADE")
-         res.json(response)
-     })
-     .catch((err) => {
-         console.log(err)
-     })
-     //console.log(preDetails)
-})
-    
-app.get('/getdetails/:id', async (req, res) => {
-    console.log(req.params)
-    const id = req.params.id
-    console.log(id)
-    // preEvent.findOne({ eventId: req.body.eventId })
-    preEvent.findOne({ eventId: id })
-    .then((data) => {
-        console.log(data);
-        res.send(data)
+app.get('/myPostEvent', requireLogin, (req, res) => {
+    postEvent.findOne({eventId: req.params})
+    .populate("eventId")
+    .then( post => {
+        let x = post
+        User.findById(x[0].eventId.createdBy)
+        .then((data) => {
+            res.json({postDetails: post, user: data})
+        })
+        .catch( err => {
+            console.log(err);
+        })
     })
-    .catch((err) => {
+    .catch( err => {
+        console.log(err)
+    })
+})
+app.get('/postEventDetails', (req, res) => {
+    postEvent.find()
+    .populate("eventId")
+    .then( post => {
+        let x = post
+        User.findById(x[0].eventId.createdBy)
+        .then((data) => {
+            res.json({postDetails: post, user: data})
+        })
+        .catch( err => {
+            console.log(err);
+        })
+    })
+    .catch( err => {
         console.log(err)
     })
 })

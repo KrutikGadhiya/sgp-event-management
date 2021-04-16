@@ -1,4 +1,4 @@
-import { Bar, Line, Pie, Polar, Radar } from 'react-chartjs-2';
+import {  Line } from 'react-chartjs-2';
 
 const LineChart = () => {
     return (

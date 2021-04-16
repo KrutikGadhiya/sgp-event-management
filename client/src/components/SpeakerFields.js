@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function CordinatorFields() {
+function CordinatorFields(props) {
   const [inputList, setInputList] = useState([{ spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
+
+  useEffect( () => {
+    setInputList(props.input) 
+    //console.log('done')
+  }, [props.input]);
 
   // handle input change
   const handleInputChange = (e, index) => {
@@ -28,7 +33,7 @@ function CordinatorFields() {
       {inputList.map((x, i) => {
         return (
           <div className="box">
-            <input
+            <input disabled
               className="input"
               type="text"
               name="spkName"
@@ -36,7 +41,7 @@ function CordinatorFields() {
               value={x.spkName}
               onChange={e => handleInputChange(e, i)}
             />
-            <input
+            <input 
               type="email"
               className="input"
               name="spkEmail"

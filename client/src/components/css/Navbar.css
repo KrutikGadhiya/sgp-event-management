@@ -87,6 +87,13 @@
   display: block;
 }
 
+.inValidEmail{
+  border-color: red;
+}
+.validEmail{
+  border-color: green;
+}
+
 
 @media screen and (max-width: 600px) {
   .topnav a, .dropdown .dropbtn{
@@ -95,9 +102,6 @@
   .topnav a.icon {
     float: right;
     display: block;
-  }
-  #h2, #span{
-      display: none;
   }
 }
 
@@ -112,6 +116,9 @@
     float: none;
     display: block;
     text-align: left;
+  }
+  .logoutBtn{
+    margin-top: 10%;
   }
   .topnav.responsive .dropdown {float: none;}
   .topnav.responsive .dropdown-content {position: relative;}

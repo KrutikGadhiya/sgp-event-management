@@ -1,15 +1,47 @@
-import { Bar, Line, Pie, Polar, Radar } from 'react-chartjs-2';
+import {  Radar } from 'react-chartjs-2';
+import axios from 'axios'
+import { useState, useEffect } from 'react';
 
 const RadarChart = () => {
+    const [count, setCount] = useState({
+        aripCount: "0",
+        cipsCount: "0",
+        cmpicaCount: "0",
+        cspitCount: "0",
+        depstarCount: "0",
+        i2imCount: "0",
+        mtinCount: "0",
+        pdpiasCount: "0",
+        rpcpCount: "0"
+    })
+    useEffect(() => {
+        axios.post('/getcount', {
+        }).then((countRes) => {
+            //console.log(countRes)
+            setCount(countRes.data)
+            //console.log(count)
+        })
+    }, [])
     return (
         <div>
             <Radar 
                 data={{
-                    labels: ["CSPIT", "DEPSTAR", "PDPIAS", "RPCP", "CMPICA", "I2IM"],
+                    labels: ["CSPIT", "DEPSTAR", "PDPIAS", "RPCP", "CMPICA", "I2IM", "ARIP", "CIPS", "MTIN"],
                     datasets: [
                         {
                           label: 'Events In Institutes',
-                          data: [6, 10, 2, 13, 5, 15],
+                          hoverBackgroundColor: 'white',
+                          pointHoverBorderWidth: '5',
+                          data: [count.cspitCount,
+                                count.depstarCount,
+                                count.pdpiasCount,
+                                count.rpcpCount,
+                                count.cmpicaCount,
+                                count.i2imCount,
+                                count.aripCount,
+                                count.cipsCount,
+                                count.mtinCount
+                            ],
                           backgroundColor: [
                             'rgba(255, 99, 132, 0.5)',
                             'rgba(54, 162, 235, 0.5)',
@@ -17,6 +49,9 @@ const RadarChart = () => {
                             'rgba(75, 192, 192, 0.5)',
                             'rgba(153, 102, 255, 0.5)',
                             'rgba(255, 159, 64, 0.5)',
+                            'rgba(23, 165, 137, 0.5)',
+                            'rgba(40, 55, 71, 0.5)',
+                            'rgba(146, 43, 33, 0.5)'
                           ],
                           borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -25,6 +60,9 @@ const RadarChart = () => {
                             'rgba(75, 192, 192, 1)',
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)',
+                            'rgba(23, 165, 137, 1)',
+                            'rgba(40, 55, 71, 1)',
+                            'rgba(146, 43, 33, 1)'
                           ],
                           borderWidth: 1,
                         },

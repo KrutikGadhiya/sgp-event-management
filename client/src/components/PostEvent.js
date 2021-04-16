@@ -1,44 +1,44 @@
 import './css/CreateEvent.css';
-import SpeakerFields from './SpeakerFields';
+// import SpeakerFields from './SpeakerFields';
 import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
+toast.configure()
 //import { Link } from 'react-router-dom';
 
-function onSuccessSubmit(){
-    window.confirm( " Success! " );
-}
+// function onSuccessSubmit(){
+//     window.confirm( " Success! " );
+// }
 
 function PostEvent(){
     const [inputList, setInputList] = useState([{ spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
 
-    const [actDate, setactDate] = useState('');
-    const [actDateTo, setactDateTo] = useState('');
-    const [evntDesc, setevntDesc] = useState('');
-    const [noOfStud, setnoOfStud] = useState('');
-    const [evntPic1, setevntPic1] = useState('');
-    const [evntPic2, setevntPic2] = useState('');
-    const [evntPic3, setevntPic3] = useState('');
-    const [evntPic4, setevntPic4] = useState('');
-    const [evntCerti, setevntCerti] = useState('');
-    const [evntPstr, setevntPstr] = useState('');
-    const [studSheet, setstudSheet] = useState('');
+    const [eventId, setevntId] = useState('')
+    const [actDate, setactDate] = useState('')
+    const [actDateTo, setactDateTo] = useState('')
+    const [evntDesc, setevntDesc] = useState('')
+    const [noOfStud, setnoOfStud] = useState('')
+    const [evntPic1, setevntPic1] = useState('')
+    const [evntPic2, setevntPic2] = useState('')
+    const [evntPic3, setevntPic3] = useState('')
+    const [evntPic4, setevntPic4] = useState('')
+    const [evntCerti, setevntCerti] = useState('')
+    const [evntPstr, setevntPstr] = useState('')
+    const [studSheet, setstudSheet] = useState('')
 
-    function fields(){
-        var postfields = {
-            actDate:actDate,
-            actDateTo:actDateTo,
-            inputList: inputList,
-            evntDesc: evntDesc,
-            noOfStud: noOfStud,
-            evntPic1: evntPic1,
-            evntPic2: evntPic2,
-            evntPic3: evntPic3,
-            evntPic4, evntPic4,
-            evntCerti: evntCerti,
-            evntPstr: evntPstr,
-            studSheet: studSheet
-        }
-        console.log(postfields)
-    }
+    const [evntPic1Url, setevntPic1Url] = useState('')
+    const [evntPic2Url, setevntPic2Url] = useState('')
+    const [evntPic3Url, setevntPic3Url] = useState('')
+    const [evntPic4Url, setevntPic4Url] = useState('')
+    const [evntCertiUrl, setevntCertiUrl] = useState('')
+    const [evntPstrUrl, setevntPstrUrl] = useState('')
+    const [inputListUrl, setInputListUrl] = useState([])
+
+    const [allFiles, setFiles] = useState([])
+    const [urls, setUrls] = useState([])
+
 
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
@@ -65,13 +65,120 @@ function PostEvent(){
         setInputList([...inputList, { spkName: "", spkEmail: "", spkCV: "", spkPhoto: "" }]);
       };
 
+      const submitForm = async () => {
+        // if (eventName === "" || evntType === "" || propDate === "" || propDateTo === "" || durEvnt === "" || evntLevel === "" || orgInst === "" || deptName === "" || inputList === "") {
+        //     //fireOnFailure()
+        //     console.log('hello');
+        // } else {
+            await axios.post('/postEvent', {
+                eventId: eventId,
+                actDate: actDate,
+                actDateTo: actDateTo,
+                evntDesc: evntDesc,
+                noOfStud: noOfStud,
+                evntPic1: evntPic1,
+                evntPic2: evntPic2,
+                evntPic3: evntPic3,
+                evntPic4: evntPic4,
+                evntCerti: evntCerti,
+                evntPstr: evntPstr,
+                studSheet: studSheet,
+                inputList: inputList
+            },
+            {
+                headers:{
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                }
+            })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+            //fireOnSuccess()
+        // }
+    }
+
+    const finalList = () => {
+        let f = []
+        f.push(evntPic1)
+        f.push(evntPic2)
+        f.push(evntPic3)
+        f.push(evntPic4)
+        f.push(evntCerti)
+        f.push(evntPstr)
+        inputList.map((spkFiles, i) => {
+            f.push(spkFiles.spkCV)
+            f.push(spkFiles.spkPhoto)
+        })
+        setFiles(f)
+        console.log(f)
+    }
+
+    const cloudinaryUpload = () => {
+        
+
+        allFiles.map((file, i) => {
+            const data = new FormData()
+            data.append("file", file[0])
+            data.append("upload_preset", "sgp-post")
+            data.append("cloud_name", "dkoj7svtw")
+    
+            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                method: "post",
+                body: data
+            })
+            .then( res => res.json())
+            .then(data => {
+                let ulist = urls
+                console.log(data.url)
+                ulist.push(data.url)
+                setUrls(ulist)
+            })
+            .catch( err => {
+                console.log(err)
+            })
+        })
+        console.log("URLS: ",urls)
+    }
+
+    function fields(){
+        let postfields = {
+            eventId: eventId,
+            actDate:actDate,
+            actDateTo:actDateTo,
+            inputList: inputList,
+            evntDesc: evntDesc,
+            noOfStud: noOfStud,
+            evntPic1: evntPic1,
+            evntPic2: evntPic2,
+            evntPic3: evntPic3,
+            evntPic4: evntPic4,
+            evntCerti: evntCerti,
+            evntPstr: evntPstr,
+            studSheet: studSheet
+        }
+        console.log(postfields)
+    }
+
     return(
         <div>
         <h1 className="eventLabel">Post Event</h1>
         <div class="grid-container">
                 <div className="col-25" id="card">
                     <div className="container">
-                        <form action='#'>
+                        <div>
+                            <div className="row">
+                                <div class="col-25">
+                                    <label htmlFor="eventId"><b>Event ID</b></label>
+                                </div>
+                                <div class="col-75">
+                                    <input className="input" type="text" id="eId" name="eventID" placeholder="YYYY - INSTITUTE - DEPARTMENT - COUNT"
+                                        value={eventId} onChange={(e) => setevntId(e.target.value)}
+                                    />
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-25">
                                     <label for="adate"><b>Actual Date</b></label>
@@ -134,7 +241,7 @@ function PostEvent(){
                                                 </div>
                                                 <div className="row">
                                                     <div class="col-25">
-                                                        <label for="date">Speaker's CV</label>
+                                                        <label for="date">Speaker's CV<br/><i>(file format: jpg, jpeg, png) Under 1MB</i></label>
                                                     </div>
                                                     <div className="col-75">
                                                         <input
@@ -150,7 +257,7 @@ function PostEvent(){
 
                                                 <div className="row">
                                                     <div class="col-25">
-                                                        <label for="date">Speaker's Photo</label>
+                                                        <label for="date">Speaker's Photo<br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
                                                     </div>
                                                     <div className="col-75">
                                                         <input
@@ -200,7 +307,7 @@ function PostEvent(){
 
                             <div class="row">
                                     <div class="col-25">
-                                        <label for="ephoto"><b>Photograph's Of Event</b></label>
+                                        <label for="ephoto"><b>Photograph's Of Even</b>t<br/>(upload 4 photographs)<br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
                                     </div>
                                     <div class="col-75">
                                         <input className="input" type="file" id="ephoto" name="eventPhoto1" 
@@ -217,10 +324,10 @@ function PostEvent(){
                                         />
                                     </div>
                             </div>
-
+                            <br />
                             <div class="row">
                                     <div class="col-25">
-                                        <label for="cert"><b>Certificate</b></label>
+                                        <label for="cert"><b>Certificate</b><br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
                                     </div>
                                     <div class="col-75">
                                         <input className="input" type="file" id="cert" name="certificate" 
@@ -230,7 +337,7 @@ function PostEvent(){
                             </div>
                             <div class="row">
                                     <div class="col-25">
-                                        <label for="poster"><b>Event Poster</b></label>
+                                        <label for="poster"><b>Event Poster</b><br/><i>(file format: jpg, jpeg, png) Under 500KB</i></label>
                                     </div>
                                     <div class="col-75">
                                         <input className="input" type="file" id="poster" name="poster" 
@@ -248,14 +355,14 @@ function PostEvent(){
                                         />
                                     </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
             </div>
         </div>
             <div>
                 <div className="sub-btn">
                     <div class="row">
-                        <input className="submit" onClick = { fields } type="submit" value="Submit" />
+                        <input className="submit" onClick={ cloudinaryUpload } type="submit" value="Submit" />
                     </div>
                 </div>
             </div>

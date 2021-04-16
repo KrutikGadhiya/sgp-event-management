@@ -5,6 +5,7 @@ const JWT_SECRET = 'ahwifbdoajxcvbneiajvcebp'
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers
+    //console.log(authorization);
     if(!authorization){
         return res.status(401).json({error: "you must be loged in"})
     }
@@ -13,10 +14,11 @@ module.exports = (req, res, next) => {
         if(err){
             return res.status(401).json({error: "you must be logged in"})
         }
-        const { _id } = payload
-        User.findById(_id).then(userdata => {
+        const { id } = payload
+        User.findById(id).then(userdata => {
             req.user = userdata
+            // console.log(payload)
+            next()
         })
-        next()
     })
 }
