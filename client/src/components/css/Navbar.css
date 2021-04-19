@@ -25,7 +25,7 @@
   display: block;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
+  padding: 18px 18px;
   text-decoration: none;
   font-size: 18px;
 }
@@ -101,7 +101,10 @@
   }
   .topnav a.icon {
     float: right;
+    position: absolute;
     display: block;
+    right: 0;
+    top: 0;
   }
 }
 

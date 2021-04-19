@@ -167,6 +167,7 @@ function SignIN(props){
                     props.changeUEmail(response.user.email)
                     localStorage.setItem('jwt', response.token)
                     localStorage.setItem('user', JSON.stringify(response.user))
+                    localStorage.setItem('userName', JSON.stringify(response.user.userName))
 
                     dispatch({type: "USER", payload: response.user})
 

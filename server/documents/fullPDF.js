@@ -1,24 +1,58 @@
-module.exports = ({ eventId, eventName, evntType, propDate, propDateTo, durEvnt, evntLevel, orgInst, deptName, inputList, createdBy}) => {
+module.exports = ({ eventId, eventName, evntType, propDate, propDateTo, durEvnt, evntLevel, orgInst, deptName, inputList, createdBy, actDate, actDateTo, evntDesc, noOfStud, studSheet, evntCertiUrl, evntPstrUrl, evntPic1Url, evntPic2Url, evntPic3Url, evntPic4Url, inputList1}) => {
     const today = new Date();
     var cordinatorFields = ``
+    var speakerFields = ``
     for (let i = 0; i < inputList.length; i++) {
        //console.log(cordinatorFields);
-       cordinatorFields += `<tr>
-                              <td style='text-align: center;' colSpan='2'><b>Coordinator No: ${i + 1}</b></td>
-                           </tr>
-                           <tr class="item">
-                              <td>Coordinator Name:</td>
-                              <td>${inputList[i].cordName}</td>
-                           </tr>
-                           <tr class="item">
-                              <td>Coordinator Email:</td>
-                              <td>${inputList[i].cordEmail}</td>
-                           </tr>
-                           <tr class="item">
-                              <td>Coordinator Contact Number:</td>
-                              <td>${inputList[i].cordNumber}</td>
-                           </tr>`
+       cordinatorFields += `
+            <tr>
+                <td style='text-align: center;' colSpan='2'><b>Coordinator No: ${i + 1}</b></td>
+            </tr>
+            <tr class="item">
+                <td>Coordinator Name:</td>
+                <td>${inputList[i].cordName}</td>
+            </tr>
+            <tr class="item">
+                <td>Coordinator Email:</td>
+                <td>${inputList[i].cordEmail}</td>
+            </tr>
+            <tr class="item">
+                <td>Coordinator Contact Number:</td>
+                <td>${inputList[i].cordNumber}</td>
+            </tr>
+    `
     }
+
+    for(let i = 0; i < inputList1.length; i++){
+        speakerFields += `
+            <tr>
+            <td style="text-align: center;" colSpan='2'><b>Speaker No: ${i + 1}</b></td>
+            </tr>
+            <tr class="item">
+                <td>Speaker Name:</td>
+                <td>${inputList1[i].spkName}</td>
+            </tr>
+            <tr class="item">
+                <td>Speaker Email:</td>
+                <td>${inputList1[i].spkEmail}</td>
+            </tr>
+            <tr class="item">
+                <td>Speaker CV:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align: center" colSpan='2'><img width="70%" src=${inputList1[i].spkCV} alt="CV"/></td>
+            </tr>
+            <tr class="item">
+                <td>Speaker Photo:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align: center" colSpan='2'><img width="70%" src=${inputList1[i].spkPhoto} alt="Photo"/></td>
+            </tr>
+        `
+    }
+
 return `
 <!doctype html>
 <html>
@@ -54,6 +88,7 @@ return `
          }
          .invoice-box table tr td:nth-child(2) {
          text-align: right;
+         word-break: break-word;
          }
          .invoice-box table tr.top table td {
          padding-bottom: 20px;
@@ -177,6 +212,60 @@ return `
               <td></td>
             </tr>
             ${cordinatorFields}
+
+            <tr class="information">
+                  <td colspan="2">
+                    <h1 style={{textAlign: 'center'}}>Post Event</h1>
+                  </td>
+               </tr>
+               <tr class="pdfHeading">
+                  <td>Event Information</td>
+                  <td></td>
+               </tr>
+               <tr class="item">
+                    <td>Actual Date From:</td>
+                    <td>${actDate}</td>
+               </tr>
+               <tr class="item">
+                    <td>Actual Date To:</td>
+                    <td>${actDateTo}</td>
+               </tr>
+               <tr class="item">
+                    <td>Event Description:</td>
+                    <td>${evntDesc}</td>
+               </tr>
+               <tr class="item">
+                    <td>Number Of Students:</td>
+                    <td>${noOfStud}</td>
+               </tr>
+               <tr class="item">
+                    <td>Student List:</td>
+                    <td>${studSheet}</td>
+               </tr>
+
+               <tr class="pdfHeading">
+               <td>Speaker Details:</td>
+               <td></td>
+               </tr>
+               
+                    ${speakerFields}
+               
+                <tr class="pdfHeading">
+                    <td>Event Photographs:</td>
+                    <td></td>
+               </tr>
+               <tr class="item">
+                    <td style="text-align: center"><img width="100%" src=${evntCertiUrl} alt="Certificate"/></td>
+                    <td style="text-align: center"><img width="100%" src=${evntPstrUrl} alt="Poster"/></td>
+               </tr>
+               <tr class="item">
+                    <td style="text-align: center"><img width="100%" src=${evntPic1Url} alt="Pic 1"/></td>
+                    <td style="text-align: center"><img width="100%" src=${evntPic2Url} alt="Pic 2"/></td>
+               </tr>
+               <tr class="item">
+                    <td style="text-align: center"><img width="100%" src=${evntPic3Url} alt="Pic 3"/></td>
+                    <td style="text-align: center"><img width="100%" src=${evntPic4Url} alt="Pic 4"/></td>
+               </tr>
          </table>
          <br />
          <h1 class="justify-center"></h1>
@@ -186,16 +275,3 @@ return `
 
     `;
 };
-
-{/* <tr class="item">
-              <td>Coordinator Name:</td>
-              <td>${inputList[0].cordName}$</td>
-            </tr>
-            <tr class="item">
-              <td>Coordinator Email:</td>
-              <td>${inputList[0].cordEmail}$</td>
-            </tr>
-            <tr class="item">
-              <td>Coordinator Contact Number:</td>
-              <td>${inputList[0].cordNumber}$</td>
-            </tr> */}

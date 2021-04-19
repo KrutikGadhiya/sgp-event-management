@@ -36,29 +36,14 @@ const PrePdf = (props) => {
             evntLevel: props.evntLevel,
             orgInst: props.orgInst,
             deptName: props.deptName,
-            inputList: props.inputList})
+            inputList: props.inputList,
+            createdBy: props.createdBy
+         })
       .then(() => axios.get('fetch-pdf', { responseType: 'blob' }))
       .then((res) => {
          const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
-         saveAs(pdfBlob, 'PreEventPdf.pdf');
+         saveAs(pdfBlob, `${props.eventId}.pdf`);
       })
-   }
-
-   function exportHTML(){
-      var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-           "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-           "xmlns='http://www.w3.org/TR/REC-html40'>"+
-           "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-      var footer = "</body></html>";
-      var sourceHTML = header+document.getElementById("doc").innerHTML+footer;
-      
-      var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-      var fileDownload = document.createElement("a");
-      document.body.appendChild(fileDownload);
-      fileDownload.href = source;
-      fileDownload.download = 'document.doc';
-      fileDownload.click();
-      document.body.removeChild(fileDownload);
    }
 
     return(
@@ -72,7 +57,10 @@ const PrePdf = (props) => {
                            <td class="title"><img  src="https://yt3.ggpht.com/a/AATXAJybtd3y_fW-_MgaRsbLpldlKK-02_AMYxU6ZEgKnQ=s900-c-k-c0xffffffff-no-rj-mo"
                               style={{width: '100%',maxWidth: '156px'}} alt="unilogo" /></td>
                            <td>
-                              Datum: {`${today.getDate()}. ${today.getMonth() + 1}. ${today.getFullYear()}.`}
+                              Date: {`${today.getDate()}. ${today.getMonth() + 1}. ${today.getFullYear()}.`}
+                              <div>
+                              Created By: <b>{props.createdBy}</b>
+                              </div>
                            </td>
                         </tr>
                      </table>
@@ -80,13 +68,14 @@ const PrePdf = (props) => {
                </tr>
                <tr class="information">
                   <td colspan="2">
+                     <h1 style={{textAlign: 'center'}}>Pre Event</h1>
                      <table>
                         <tr>
                            <td>
                               Event name: {props.eventName}
                            </td>
                            <td>
-                              Event ID: {props.eventId}
+                              Event ID: <b>{props.eventId}</b>
                            </td>
                         </tr>
                      </table>
@@ -142,7 +131,7 @@ const PrePdf = (props) => {
                      return (
                         <>
                            <tr style={{textAlign: 'center'}}>
-                              <td colSpan='2'>Coordinator No: {i + 1}</td>
+                              <td style={{textAlign: 'center'}} colSpan='2'><b>Coordinator No: {i + 1}</b></td>
                            </tr>
                            <tr class="item">
                               <td>Coordinator Name:</td>
@@ -171,8 +160,6 @@ const PrePdf = (props) => {
          <button className='submit' onClick={() => { props.changeState(false)}}>GO Back</button>
          <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>
          <button className="submit" onClick = { createAndDownloasPdf } >Download PDF</button>
-         <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>
-         <button className="submit" onClick = { exportHTML } >Download Word</button>
       </div>
       </>
     )

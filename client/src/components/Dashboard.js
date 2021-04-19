@@ -119,7 +119,7 @@ function Dashboard(){
     return(
         <div>
             <div style={{textAlign: 'center', margin: '3% 3%'}}>
-                <button className='submit' onClick={ () => setState(false) } >All Events</button>
+                <button className='submit' onClick={ () => setState(false) } >My Events</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button className='submit' onClick={ () => setState(true) } >Charts</button>
             </div>
@@ -129,7 +129,7 @@ function Dashboard(){
                         <div className='container'>
                             <div className="row">
                                 <div className="col-25">
-                                    <label for="date"><b>Proposed Date From</b></label>
+                                    <label for="date"><b>From</b></label>
                                 </div>
                                 <div className="col-75">
                                     <input required className="input" type="text" id="sdate" name="eventstartdate" placeholder="2015"

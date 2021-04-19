@@ -7,6 +7,7 @@ import SignUp from './components/SignUp';
 import Navbar from './components/Navbar';
 import CreateEvent from './components/CreateEvent';
 import PrePdf from './components/PrePdf';
+import EventPdf from './components/EventPdf'
 import PostEvent from './components/PostEvent';
 import EditEvent from './components/EditEvent';
 import DeleteEvent from './components/DeleteEvent';
@@ -59,6 +60,7 @@ const Routing = (props) => {
         <Route exact path='/deleteEvent'><DeleteEvent /></Route>
         <Route exact path='/dashboard'><Dashboard /></Route>
         <Route exact path='/createPdf'><PrePdf /></Route>
+        <Route exact path='/printPdf'><EventPdf /></Route>
       </Switch>
   )
 }

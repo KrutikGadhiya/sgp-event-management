@@ -22,13 +22,14 @@ function Navbar(props){
               </div>,
               <div className="dropdown">
                 <button className="dropbtn">Events
-                  <i className="fa fa-caret-down"> </i>
+                  <i className="fa fa-caret-down"></i>
                 </button>
                 <div className="dropdown-content">
                   <Link to="/createEvent">Pre Event</Link>
                   <Link to="/postEvent">Post Event</Link>
                   <Link to="/editEvent">Edit Event</Link>
                   <Link to="/deleteEvent">Delete Event</Link>
+                  <Link to="/printPdf">Print PDF</Link>
                 </div>
               </div >,
               <div>
@@ -48,13 +49,14 @@ function Navbar(props){
     }
 
     function changeUName(){
-      setuName(props.name)
+      let name = localStorage.getItem('userName')
+      setuName(JSON.parse(name))
       setuSName(props.usname)
     }
     //let fun = setTimeout(changeUName, 1);
     useEffect(() => {
       changeUName()
-    }, [props.name])
+    }, [localStorage.getItem('userName')])
 
     const onLogout = () => {
       Swal.fire({
@@ -78,6 +80,7 @@ function Navbar(props){
               setuName('User')
               setuSName('Name')
               localStorage.clear()
+              // localStorage.setItem('userName', 'User')
               dispatch({type: 'CLEAR'})
               props.history.push('/signIn');
             }

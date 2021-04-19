@@ -46,29 +46,36 @@ function PostEvent(){
         setInputList(list);
       };
       const handleInputChange1 = (e, index) => {
-        setLoading(true)
-        const { name, files } = e.target;
-        const list = [...inputList];
+        if(e.target.files[0].size > 0.5 * 1024 * 1024){
+            toast.error("Please Select File Under 500KB",{
+                autoClose: 5000
+            })
+            return
+        } else {
+            setLoading(true)
+            const { name, files } = e.target;
+            const list = [...inputList];
 
-        const data = new FormData()
-        data.append("file", files[0])
-        data.append("upload_preset", "sgp-post")
-        data.append("cloud_name", "dkoj7svtw")
-        fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-            method: "post",
-            body: data
-        })
-        .then( res => res.json())
-        .then(data1 => {
-            console.log(data1.url)
-            setevntPic1Url(data1.url)
-            list[index][name] = data1.url;
-            setInputList(list);
-            setLoading(false)
-        })
-        .catch( err => {
-            console.log(err);
-        })
+            const data = new FormData()
+            data.append("file", files[0])
+            data.append("upload_preset", "sgp-post")
+            data.append("cloud_name", "dkoj7svtw")
+            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                method: "post",
+                body: data
+            })
+            .then( res => res.json())
+            .then(data1 => {
+                console.log(data1.url)
+                setevntPic1Url(data1.url)
+                list[index][name] = data1.url;
+                setInputList(list);
+                setLoading(false)
+            })
+            .catch( err => {
+                console.log(err);
+            })
+        }
       };
     
       // handle click event of the Remove button
@@ -293,82 +300,110 @@ function PostEvent(){
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto1" 
                                          onChange={(e)=>{
                                              setevntPic1(e.target.files)
-                                             setLoading(true)
-                                             const data = new FormData()
-                                             data.append("file", e.target.files[0])
-                                             data.append("upload_preset", "sgp-post")
-                                             data.append("cloud_name", "dkoj7svtw")
-                                             fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                 method: "post",
-                                                 body: data
-                                             })
-                                             .then( res => res.json())
-                                             .then(data1 => {
-                                                 console.log(data1.url)
-                                                 setevntPic1Url(data1.url)
-                                                 setLoading(false)
-                                             })
+                                             if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntPic1Url(data1.url)
+                                                    setLoading(false)
+                                                })
                                             }
+                                        }
                                         }
                                         />
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto2" 
                                         onChange={(e)=>{
                                             setevntPic2(e.target.files)
-                                            setLoading(true)
-                                            const data = new FormData()
-                                            data.append("file", e.target.files[0])
-                                            data.append("upload_preset", "sgp-post")
-                                            data.append("cloud_name", "dkoj7svtw")
-                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                method: "post",
-                                                body: data
-                                            })
-                                            .then( res => res.json())
-                                            .then(data1 => {
-                                                console.log(data1.url)
-                                                setevntPic2Url(data1.url)
-                                                setLoading(false)
-                                            })
+                                            if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntPic2Url(data1.url)
+                                                    setLoading(false)
+                                                })
+                                            }
                                            }}
                                         />
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto3" 
                                         onChange={(e)=>{
                                             setevntPic3(e.target.files)
-                                            setLoading(true)
-                                            const data = new FormData()
-                                            data.append("file", e.target.files[0])
-                                            data.append("upload_preset", "sgp-post")
-                                            data.append("cloud_name", "dkoj7svtw")
-                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                method: "post",
-                                                body: data
-                                            })
-                                            .then( res => res.json())
-                                            .then(data1 => {
-                                                console.log(data1.url)
-                                                setevntPic3Url(data1.url)
-                                                setLoading(false)
-                                            })
+                                            if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntPic3Url(data1.url)
+                                                    setLoading(false)
+                                                })
+                                            }
                                            }}
                                         />
                                         <input required className="input" type="file" id="ephoto" name="eventPhoto4" 
                                         onChange={(e)=>{
                                             setevntPic4(e.target.files)
-                                            setLoading(true)
-                                            const data = new FormData()
-                                            data.append("file", e.target.files[0])
-                                            data.append("upload_preset", "sgp-post")
-                                            data.append("cloud_name", "dkoj7svtw")
-                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                method: "post",
-                                                body: data
-                                            })
-                                            .then( res => res.json())
-                                            .then(data1 => {
-                                                console.log(data1.url)
-                                                setevntPic4Url(data1.url)
-                                                setLoading(false)
-                                            })
+                                            if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntPic4Url(data1.url)
+                                                    setLoading(false)
+                                                })
+                                            }
                                         }}
                                         />
                                     </div>
@@ -382,21 +417,28 @@ function PostEvent(){
                                         <input required className="input" type="file" id="cert" name="certificate" 
                                         onChange={(e)=>{
                                             setevntCerti(e.target.files)
-                                            setLoading(true)
-                                            const data = new FormData()
-                                            data.append("file", e.target.files[0])
-                                            data.append("upload_preset", "sgp-post")
-                                            data.append("cloud_name", "dkoj7svtw")
-                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                method: "post",
-                                                body: data
-                                            })
-                                            .then( res => res.json())
-                                            .then(data1 => {
-                                                console.log(data1.url)
-                                                setevntCertiUrl(data1.url)
-                                                setLoading(false)
-                                            })
+                                            if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntCertiUrl(data1.url)
+                                                    setLoading(false)
+                                                })
+                                            }
                                         }}
                                         />
                                     </div>
@@ -408,22 +450,29 @@ function PostEvent(){
                                     <div class="col-75">
                                         <input required className="input" type="file" id="poster" name="poster" 
                                         onChange={(e)=>{
-                                            setLoading(true)
-                                            setevntPstr(e.target.files)
-                                            const data = new FormData()
-                                            data.append("file", e.target.files[0])
-                                            data.append("upload_preset", "sgp-post")
-                                            data.append("cloud_name", "dkoj7svtw")
-                                            fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
-                                                method: "post",
-                                                body: data
-                                            })
-                                            .then( res => res.json())
-                                            .then(data1 => {
-                                                console.log(data1.url)
-                                                setevntPstrUrl(data1.url)
-                                                setLoading(false)
-                                            })
+                                            if(e.target.files[0].size > 0.5 * 1024 * 1024){
+                                                toast.error("Please Select File Under 500KB",{
+                                                    autoClose: 5000
+                                                })
+                                                return
+                                            } else {
+                                                setLoading(true)
+                                                setevntPstr(e.target.files)
+                                                const data = new FormData()
+                                                data.append("file", e.target.files[0])
+                                                data.append("upload_preset", "sgp-post")
+                                                data.append("cloud_name", "dkoj7svtw")
+                                                fetch("https://api.cloudinary.com/v1_1/dkoj7svtw/image/upload", {
+                                                    method: "post",
+                                                    body: data
+                                                })
+                                                .then( res => res.json())
+                                                .then(data1 => {
+                                                    console.log(data1.url)
+                                                    setevntPstrUrl(data1.url)
+                                                    setLoading(false)
+                                                })
+                                            }
                                            }}
                                         />
                                     </div>

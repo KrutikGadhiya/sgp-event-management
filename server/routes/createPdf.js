@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const pdf = require('html-pdf')
 const pdfTemplate = require('../documents')
+const pdfTemplate2 = require('../documents/fullPDF')
 
 const dir = __dirname;
 const dir2 = dir.replace("\\" + "routes" , '')
@@ -9,6 +10,18 @@ const dir2 = dir.replace("\\" + "routes" , '')
 router.post('/create-pdf', (req, res) => {
     //console.log(req.body)
     pdf.create(pdfTemplate(req.body), {}).toFile('./result.pdf', (err) => {
+        console.log('creating PDF')
+        if(err){
+            console.log('error');
+            res.send( Promise.reject() );
+        }
+        res.send( Promise.resolve() );
+    })
+})
+
+router.post('/createFull-pdf', (req, res) => {
+    //console.log(req.body)
+    pdf.create(pdfTemplate2(req.body), {}).toFile('./result.pdf', (err) => {
         console.log('creating PDF')
         if(err){
             console.log('error');

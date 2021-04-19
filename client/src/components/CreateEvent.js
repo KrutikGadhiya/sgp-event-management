@@ -429,6 +429,7 @@ function CreateEvent(props) {
                     orgInst={orgInst}
                     deptName={deptName}
                     inputList={inputList}
+                    createdBy = {JSON.parse(localStorage.getItem('user')).email}
                 />
             )
         }
